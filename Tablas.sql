@@ -16,8 +16,4 @@ CREATE TABLE Fabricante(
 
 ALTER TABLE Producto 
 ADD CONSTRAINT Codigo_fabricante
-<<<<<<< HEAD
-FOREIGN KEY (Codigo) REFERENCES Fabricante (Codigo);  
-=======
 FOREIGN KEY (Codigo_fabricante) REFERENCES Fabricante (Codigo);
->>>>>>> b053508 (Añadi y llame los procedimientos)
