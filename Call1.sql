@@ -11,3 +11,5 @@ CALL Producto("Impresora HP Deskjet 3720", 59.99, 7);
 CALL Producto("Impresora HP Laserjet Pro M26nw", 180, 7); 
 
 Select *from Producto;
+
+/*Prueba*/
