@@ -85,7 +85,72 @@ SELECT p.Nombre AS NombreProducto, p.Precio,f.Nombre AS Nombre_Fabricante FROM P
 #3
 SELECT p.Codigo AS Identificador_producto, p.Nombre AS NombreProducto, f.Codigo AS Identificador_fabricante, f.Nombre AS Nombre_Fabricante FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo;
 #4
-SELECT p.Nombre AS NombreProducto, p.Precio, f.Nombre AS Nombre_Fabricante FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo;
-
-
-
+SELECT p.Nombre AS NombreProducto, p.Precio, f.Nombre AS Nombre_Fabricante FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo  ORDER BY Precio ASC LIMIT 1;
+#5
+SELECT p.Nombre AS NombreProducto, p.Precio, f.Nombre AS Nombre_Fabricante FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo  ORDER BY Precio DESC LIMIT 1;
+#6
+SELECT p.Nombre, f.Nombre AS Nombre_fab,p.Precio FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante= f.Codigo WHERE p.Codigo_fabricante = (SELECT Codigo FROM Fabricante WHERE nombre = 'Lenovo');
+#7
+SELECT p.Nombre, f.Nombre AS Nombre_fab,p.Precio FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante= f.Codigo WHERE p.Codigo_fabricante = (SELECT Codigo FROM Fabricante WHERE nombre = 'Crucial') AND p.Precio >200;
+#8
+SELECT p.Nombre, f.Nombre AS Nombre_fab,p.Precio FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante= f.Codigo WHERE p.Codigo_fabricante = (SELECT Codigo FROM Fabricante WHERE nombre = 'Asus')
+OR p.Codigo_fabricante = (SELECT Codigo FROM Fabricante WHERE nombre = 'Hewlett-Packard')
+OR p.Codigo_fabricante = (SELECT Codigo FROM Fabricante WHERE nombre = 'Seagate');
+#9
+SELECT p.Nombre, f.Nombre AS Nombre_fab,p.Precio FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante= f.Codigo WHERE p.Codigo_fabricante IN (SELECT Codigo FROM Fabricante WHERE nombre IN ('Asus','Hewlett-Packard','Seagate'));
+#10
+SELECT p.Nombre, p.Precio, f.Nombre AS Nombre_Fabri FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre LIKE '%E';
+#11
+SELECT p.Nombre, p.Precio, f.Nombre AS Nombre_Fabri FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre LIKE '%W%';
+#12 /*Revisar mas tarde//////////////////////////////////////////////////////////////////////////////////////////////////*/
+SELECT p.Nombre AS Nombre_Produ, p.Precio AS Precio_desc, f.Nombre AS Nombre_asc FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE p.Precio >= 180 ORDER BY p.Precio DESC, p.Nombre ASC;
+#13
+SELECT DISTINCT f.Nombre, f.Codigo FROM Fabricante f JOIN Producto p ON f.Codigo = p.Codigo_fabricante;
+#1.1.5 Consulta multitabla (Composicion Externa)
+#1
+SELECT f.Codigo, f.Nombre AS nombre_fabricant, p.Nombre AS nombre_product, p.Precio FROM Fabricante f LEFT JOIN Producto p ON f.Codigo = p.Codigo_fabricante;
+#2
+SELECT f.Codigo, f.Nombre AS nombre_fabricant, p.Nombre AS nombre_product, p.Precio FROM Fabricante f LEFT JOIN Producto p ON f.Codigo = p.Codigo_fabricante WHERE p.Nombre IS NULL;
+#3
+/*Pregunta del documento*/
+#1.1.6 Consultas Resumen
+#1
+SELECT COUNT(Nombre) AS Total_produ FROM Producto;
+#2
+SELECT COUNT(Nombre) AS Total_fabri FROM Fabricante;
+#3
+SELECT COUNT(DISTINCT Codigo_fabricante) AS Numeros_ids FROM Producto;
+#4
+SELECT AVG(Precio) AS Media_precio FROM Producto;
+#5
+SELECT Precio AS Precio_bara FROM Producto ORDER BY Precio ASC LIMIT 1;
+#6
+SELECT Precio AS Precio_bara FROM Producto ORDER BY Precio ASC LIMIT 1;
+#7
+SELECT Nombre, Precio AS Precio_bara FROM Producto ORDER BY Precio ASC LIMIT 1;
+#8
+SELECT Nombre, Precio AS Precio_bara FROM Producto ORDER BY Precio DESC LIMIT 1;
+#9
+SELECT SUM(Precio) AS Total_precio FROM Producto;
+#10
+SELECT COUNT(p.Codigo_fabricante) AS Cantidad_Asus FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = "Asus";
+#11
+SELECT AVG(p.Precio) AS Media_Asus FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Asus';
+#12
+SELECT p.Precio AS Asus_barato FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = "Asus"  ORDER BY Precio ASC LIMIT 1;
+#13
+SELECT p.Precio AS Asus_caro FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = "Asus"  ORDER BY Precio DESC LIMIT 1;
+#14
+SELECT SUM(p.Precio) AS Suma_Asus FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Asus';
+#15
+SELECT MIN(p.Precio) AS Minimo_Crucial, MAX(p.Precio) AS maximo_Crucial, AVG (p.Precio) AS Media_Crucial, COUNT(p.Codigo_fabricante) AS Cantidad_Crucial FROM Producto p JOIN Fabricante f ON f.Codigo = p.Codigo_fabricante WHERE f.Nombre = "Crucial";
+#16
+SELECT f.Nombre AS Nombre_Fabr, COUNT(p.Codigo) AS Cant_Produc FROM Fabricante f LEFT JOIN Producto p ON f.Codigo = p.Codigo_fabricante GROUP BY f.Nombre ORDER BY Cant_Produc DESC;
+#17
+SELECT f.Nombre, MAX(Precio) AS precio_maximo, MIN(Precio) AS precio_minimo, AVG(Precio) AS precio_promedio FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo GROUP BY f.Nombre;
+#18
+SELECT Codigo AS Codigo_fabri, MAX(Precio) AS precio_maximo, MIN(Precio) AS precio_minimo, AVG(Precio) AS precio_promedio FROM Producto p GROUP BY Nombre HAVING AVG(Precio)>200;
+#19
+SELECT f.Nombre, MAX(Precio) AS precio_maximo, MIN(Precio) AS precio_minimo, AVG(Precio) AS precio_promedio FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo GROUP BY Nombre HAVING AVG(Precio)>200;
+#20
+SELECT COUNT(Precio) AS Pre_mayor FROM Producto WHERE Precio >=180;

@@ -4,7 +4,7 @@ CALL Fabricante('Hewlett-Packard');
 CALL Fabricante('Samsung');   
 CALL Fabricante('Seagate');        
 CALL Fabricante('Crucial');        
-CALL Fabricante('Gigabyte');       
+CALL Fabricante('Gigabyte');     
 CALL Fabricante('Huawei');
 CALL Fabricante('Xiaomi');
 SELECT * FROM Fabricante;
