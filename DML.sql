@@ -18,10 +18,7 @@ SELECT UPPER(Nombre) AS Nom_Mayusc,Precio FROM Producto;
 /*Septimo punto*/
 SELECT LOWER(Nombre) AS Nom_minus,Precio FROM Producto;
 /*Octavo punto*/
-SELECT
-    UPPER(LEFT(Nombre, 2)) AS Ini_MAY, Nombre
-FROM
-    Fabricante;
+SELECT UPPER(LEFT(Nombre, 2)) AS Ini_MAY, Nombre FROM Fabricante;
 /*Noveno punto*/
 SELECT Nombre,CEILING(Precio) AS precio_redond FROM producto;
 /*Decimo punto*/
@@ -57,3 +54,38 @@ SELECT Nombre FROM Producto WHERE precio <= 400;
 SELECT Nombre, Precio FROM Producto WHERE Precio >=80 AND precio <=300;
 #25
 SELECT  Nombre, Precio FROM Producto WHERE Precio BETWEEN 60 AND 200;
+#26
+SELECT Nombre, Precio, Codigo_fabricante FROM Producto WHERE Precio >= 200 AND Codigo_fabricante = 6;
+#27
+SELECT Nombre, Codigo_fabricante FROM Producto WHERE Codigo_fabricante = 1 OR Codigo_fabricante = 3 OR Codigo_fabricante = 5;
+#28
+SELECT Nombre, Codigo_fabricante FROM Producto WHERE Codigo_fabricante IN (1,3,5);
+#29
+SELECT Nombre, Precio * 100 AS Centimos FROM Producto;
+#30
+SELECT Nombre FROM Fabricante WHERE Nombre LIKE 'S%';
+#31
+SELECT Nombre FROM Fabricante WHERE Nombre LIKE '%E';
+#32
+SELECT Nombre FROM Fabricante WHERE Nombre LIKE '%W%';
+#33
+SELECT LEFT(Nombre, 4) FROM Fabricante;
+#34
+SELECT Nombre FROM Producto WHERE Nombre LIKE '%Portatil%';
+#35
+SELECT Nombre,Precio FROM Producto WHERE Nombre LIKE '%Monitor%' AND Precio < 215;
+#36
+SELECT Precio,Nombre FROM Producto WHERE Precio >= 180 ORDER BY Precio DESC, Nombre ASC;
+
+#1.1.4 Consultas multitabla (Composicion interna)
+#1 
+SELECT p.Nombre AS NombreProducto, p.Precio,f.Nombre AS NombreF_abricante FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo;
+#2
+SELECT p.Nombre AS NombreProducto, p.Precio,f.Nombre AS Nombre_Fabricante FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo ORDER BY Nombre_Fabricante ASC;
+#3
+SELECT p.Codigo AS Identificador_producto, p.Nombre AS NombreProducto, f.Codigo AS Identificador_fabricante, f.Nombre AS Nombre_Fabricante FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo;
+#4
+SELECT p.Nombre AS NombreProducto, p.Precio, f.Nombre AS Nombre_Fabricante FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo;
+
+
+
