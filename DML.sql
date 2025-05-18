@@ -170,11 +170,44 @@ SELECT p.Nombre, MAX(Precio) AS Product_caro, f.Nombre AS Nombre_fabri FROM Prod
 #1.1.7
 #1
 SELECT p.Nombre, (SELECT f.Nombre FROM Fabricante f WHERE f.Nombre="Lenovo") AS Produ_lenovo FROM Producto p;
-
-
-
-
-
+#2
+SELECT MAX(precio),Nombre FROM Producto WHERE codigo_fabricante IN (SELECT codigo FROM Fabricante WHERE nombre = 'Lenovo');
+#3
+SELECT p.Nombre, p.Precio, f.Nombre FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Lenovo' ORDER BY p.Precio DESC LIMIT 1;
+#4
+SELECT p.Nombre, p.Precio, f.Nombre FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Hewlett-Packard' ORDER BY p.Precio ASC LIMIT 1;
+#5
+SELECT p.Nombre, p.Precio, f.Nombre FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE p.Precio >= ( SELECT MAX(p.Precio) FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Lenovo' );
+#6
+SELECT p.Nombre, p.Precio, f.Nombre FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Asus' AND p.Precio > ( SELECT AVG(p.Precio) FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Asus' );
+#1.1.7.2 Subconsultas con ALL y ANY
+#7
+SELECT Nombre,Precio FROM Producto WHERE Precio >= ALL(SELECT Precio FROM Producto);
+#8
+SELECT Nombre,Precio FROM Producto WHERE Precio <= ALL(SELECT Precio FROM Producto);
+#9
+SELECT Nombre FROM Fabricante WHERE Codigo = ANY (SELECT Codigo_fabricante FROM Producto);
+#10
+SELECT Nombre FROM Fabricante WHERE Codigo != ALL (SELECT Codigo_fabricante FROM Producto WHERE Codigo_fabricante);
+#1.1.7.3
+#11
+SELECT Nombre FROM Fabricante WHERE Codigo IN (SELECT Codigo_fabricante FROM Producto WHERE Codigo_fabricante);
+#12
+SELECT Nombre FROM Fabricante WHERE Codigo NOT IN (SELECT Codigo_fabricante FROM Producto WHERE Codigo_fabricante);
+#1.1.7.4
+#13
+SELECT f.Nombre FROM Fabricante F WHERE EXISTS (SELECT * FROM Producto P WHERE P.Codigo_fabricante = F.Codigo);
+#14
+SELECT f.Nombre FROM Fabricante F WHERE NOT EXISTS (SELECT * FROM Producto P WHERE P.Codigo_fabricante = F.Codigo);
+#1.1.7.5
+#15
+SELECT f.Nombre AS Nombre_Fabricante, p.Nombre AS Nombre_Producto_Mas_Caro, p.Precio FROM Fabricante f JOIN Producto P ON P.Codigo_fabricante = F.Codigo WHERE P.Precio = (SELECT MAX(P.Precio) FROM Producto P WHERE P.Codigo_fabricante = F.Codigo);
+#16
+SELECT f.Nombre AS Nombre_Fabricante, p.Nombre AS Nombre_Producto_Mas_Caro, p.Precio FROM Fabricante f JOIN Producto P ON P.Codigo_fabricante = F.Codigo WHERE P.Precio >= (SELECT AVG(P.Precio) FROM Producto P WHERE P.Codigo_fabricante = F.Codigo);
+#17
+SELECT p.Nombre AS Producto_Mas_Caro FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Lenovo' AND p.Precio = (SELECT MAX(p.Precio) FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Lenovo');
+#1.1.8 Subconsultas (En la clausula having)
+SELECT f.Nombre AS Nombre_Fabricante, COUNT(p.Codigo) AS numero_Productos FROM Fabricante f JOIN Producto p ON p.Codigo_fabricante = f.Codigo GROUP BY f.Nombre HAVING COUNT(p.Codigo) = ( SELECT COUNT(p.Codigo) FROM Producto p JOIN Fabricante f ON p.Codigo_fabricante = f.Codigo WHERE f.Nombre = 'Lenovo');
 
 
 
